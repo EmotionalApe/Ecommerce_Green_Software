@@ -1,5 +1,6 @@
 from codecarbon import OfflineEmissionsTracker
-#this is a comment
+
+#classes
 class Product:
     def __init__(self, id, name, price):
         self.id = id
