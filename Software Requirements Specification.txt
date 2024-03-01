@@ -1,0 +1,232 @@
+Software Requirements Specification (SRS) for E-commerce Application
+
+1. Introduction
+
+The E-commerce Application aims to provide users with a convenient platform to browse, select, and purchase products online. It addresses the inconveniences of traditional shopping methods by offering a vast range of products, centralized product information, streamlined order management, and secure transactions. This document outlines the requirements and specifications for the development of the E-commerce Application.
+
+2. Requirements Analysis
+
+2.1 Inconvenient Traditional Shopping Methods
+
+Issue: Traditional shopping often involves physical visits to brick-and-mortar stores, which can be time-consuming and inconvenient for customers.
+Solution: The E-commerce Application provides a convenient alternative, allowing users to browse, select, and purchase products from the comfort of their homes using computers or mobile devices.
+
+2.2 Limited Product Accessibility
+
+Issue: Physical stores have limited space, leading to a restricted range of products available for customers.
+Solution: The E-commerce Application overcomes this limitation by offering a vast and diverse range of products. Users have access to a comprehensive catalog, including various categories, brands, and options that may not be available in local stores.
+
+2.3 Lack of Centralized Product Information
+
+Issue: In traditional shopping, obtaining detailed product information can be challenging.
+Solution: The E-commerce Application centralizes product information, providing detailed descriptions, specifications, reviews, and images for each product, enabling customers to make informed decisions.
+
+2.4 Difficulty in Managing and Tracking Orders
+
+Issue: Traditional methods of order management involve paper receipts and manual tracking.
+Solution: The E-commerce Application simplifies order management for users, allowing them to track order status in real-time, receive notifications on shipping and delivery, and maintain a digital record of their purchase history.
+
+3. Functional Specification
+
+3.1 Client
+
+3.1.1 User Registration and Authentication
+
+- User Registration:
+  - Users can register with a unique username and password.
+  - Registration process includes validation checks for email addresses and secure password requirements.
+  - Optional: Implement two-factor authentication for enhanced security.
+
+- Password Recovery Functionality:
+  - Users can reset their passwords through a secure process, such as email verification or security questions.
+
+3.1.2 Browsing and Searching
+
+- Search Functionality:
+  - Users can search products by category, price range, or keywords.
+  - Advanced filtering options provided for refining search.
+
+- Product Details:
+  - Detailed product information including descriptions, specifications, prices, and high-quality images displayed on each product page.
+
+3.1.3 Shopping Cart
+
+- Add/Remove Items:
+  - Users can add items to the shopping cart with a single click and remove items as needed.
+  - Cart updates dynamically without page refresh.
+
+- View/Edit Cart:
+  - Clear view of items in the cart with quantities and prices.
+  - Editing options include updating quantities, removing items, and viewing total cost.
+
+3.1.4 Checkout and Payment
+
+- Multiple Payment Options:
+  - Support various payment methods including credit/debit cards, PayPal, etc.
+  
+- Secure Transaction Handling:
+  - Implement HTTPS protocol and SSL certificates for secure data transmission.
+  
+3.1.5 Order Tracking
+
+- Order History:
+  - Users can access comprehensive order history including past purchases and statuses.
+  - Real-time tracking of current orders with updates on processing, shipping, and delivery status.
+
+3.2 Administrator
+
+3.2.1 Product Management
+
+- Add/Remove/Edit Products:
+  - User-friendly interface for managing product catalog.
+  - Ability to add, remove, or edit product details.
+
+- Manage Product Categories:
+  - Easily configurable categories and subcategories.
+
+3.2.2 Order Management
+
+- View/Process Orders:
+  - Dashboard displaying pending orders with relevant details.
+  - Ability to update order status and process orders efficiently.
+
+3.2.3 User Management
+
+- Manage Client Accounts:
+  - Add/Remove/Edit client accounts.
+  - Monitor user activity including login and purchase history.
+
+3.2.4 Analytics and Reporting
+
+- Generate Reports:
+  - Detailed reports on sales, popular products, and user behavior.
+  - Exportable reports in common formats (CSV, PDF) for further analysis.
+
+3.3 Seller
+
+3.3.1 Product Management
+
+- Add/Remove/Edit Products:
+  - Seller-friendly interface for managing product catalog.
+  - Ability to add, remove, or edit product details.
+
+- Manage Product Categories:
+  - Easily configurable categories and subcategories.
+
+3.3.2 Order Management
+
+- View/Process Orders:
+  - Dashboard displaying pending orders with relevant details.
+  - Ability to update order status and process orders efficiently.
+
+3.3.3 Analytics and Reporting
+
+- Generate Reports:
+  - Detailed reports on sales, popular products, and user behavior.
+  - Exportable reports in common formats (CSV, PDF) for further analysis.
+
+
+4. External Interface Specification
+
+4.1 User Interface
+
+- Responsive Design:
+  - Adaptation to different screen sizes using frameworks like Bootstrap or Flexbox.
+  - Intuitive navigation for both clients and administrators.
+
+4.2 Communication Protocols
+
+- HTTPS for Secure Data Transmission:
+  - Encryption of data transmitted between clients and servers.
+  - Implementation of SSL certificates for authentication and secure connection.
+  
+- RESTful API for Client-Server Communication:
+  - Design of API endpoints following RESTful principles.
+  - Clear documentation of endpoints, request methods, and response formats.
+
+4.3 Hardware Interfaces
+
+- Compatible with Common Web Browsers:
+  - Compatibility with popular browsers like Chrome, Firefox, Safari, and Edge.
+  
+- Mobile-Friendly Interface:
+  - Responsive design for optimal viewing on mobile devices.
+
+4.4 Database Backend
+
+- MongoDB for Data Storage:
+  - Utilization of MongoDB as the NoSQL database.
+  - Regular backups to prevent data loss.
+
+5. Technical Specification
+
+5.1 Performance Constraints
+
+- Page Load Time: Less than 3 Seconds:
+  - Optimization strategies including image optimization and content delivery networks.
+  
+- Concurrent User Handling: At Least 1000 Users:
+  - Techniques such as load balancing and server-side caching.
+
+5.2 Memory/OS/Hardware
+
+- Minimum Server Requirements: 8GB RAM, Quad-Core Processor:
+  - Allocation of sufficient resources for handling user requests.
+  
+- Compatibility with Linux-Based Hosting Environments:
+  - Stability and compatibility with web server software.
+  
+- Database Optimization for Efficient Memory Usage:
+  - Indexing, query optimization, and regular maintenance.
+
+6. Use Cases
+
+6.1 Buyer Use Cases
+
+UC1: Search and Purchase Product
+Actor: Buyer
+Description: The buyer searches for a product, adds it to the cart, and completes the purchase.
+Preconditions: The buyer is logged into the system.
+Main Flow:
+- Buyer enters search keywords.
+- System displays search results.
+- Buyer selects a product and adds it to the cart.
+- System prompts buyer to review cart and proceed to checkout.
+- Buyer completes payment.
+Postconditions: Order is placed, and buyer receives confirmation.
+
+UC2: Track Order
+Actor: Buyer
+Description: The buyer tracks the status of an order.
+Preconditions: The buyer is logged into the system and has placed an order.
+Main Flow:
+- Buyer navigates to order history.
+- System displays list of orders.
+- Buyer selects an order to view details.
+- System displays order details including status.
+Postconditions: Buyer has up-to-date information on order status.
+
+6.2 Seller Use Cases
+
+UC3: Add Product
+Actor: Seller
+Description: The seller adds a new product to the catalog.
+Preconditions: The seller is logged into the system and has seller privileges.
+Main Flow:
+- Seller accesses product management interface.
+- Seller inputs product details.
+- System validates product information.
+- Product is added to the catalog.
+Postconditions: New product is available for sale.
+
+UC4: Process Order
+Actor: Seller
+Description: The seller processes an order received from a buyer.
+Preconditions: The seller is logged into the system and has seller privileges.
+Main Flow:
+- Seller accesses order management interface.
+- System displays list of pending orders.
+- Seller selects an order to process.
+- System prompts seller to update order status (shipped, delivered, etc.).
+Postconditions: Order status is updated, and buyer is notified.
+
