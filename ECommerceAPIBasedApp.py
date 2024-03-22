@@ -123,6 +123,18 @@ def delete_from_cart():
     else:
         return jsonify({'error': 'Product not found in the cart'}), 404
 
+@app.route('/search', methods=['GET'])
+def search_products():
+    q = request.args.get('q')
+    if not q:
+        return jsonify({'error': 'Search query parameter "q" is missing'}), 400
+
+    q_lower = q.lower()
+    q_result = [item for item in products if item['name'].lower().startswith(q_lower)]
+
+    return jsonify(q_result)
+
+
 print(carts)
 if __name__ == '__main__':
     app.run(debug=True)
