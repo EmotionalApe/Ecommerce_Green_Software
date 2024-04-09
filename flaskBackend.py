@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 from flask_pymongo import pymongo
 
 from bcrypt import hashpw, gensalt, checkpw
@@ -10,6 +11,7 @@ client = pymongo.MongoClient(CONNECTION_STRING)
 db = client.get_database('ecommerce')
 
 app = Flask(__name__)
+CORS(app)
 app.config['SECRET_KEY'] = 'secret'
 
 
