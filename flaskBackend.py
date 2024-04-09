@@ -1,16 +1,20 @@
 from flask import Flask, jsonify, request
 from flask_pymongo import pymongo
 
+from bcrypt import hashpw, gensalt, checkpw
+from jwt import encode, decode
+
+
 CONNECTION_STRING = "mongodb+srv://maruf1611khan:maruf1611khan@cluster0.5fkcwee.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0/"
 client = pymongo.MongoClient(CONNECTION_STRING)
 db = client.get_database('ecommerce')
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'secret'
 
 
 @app.route("/")
 def hello_world():
-    db.inventory.insert_one({"bruh": 2})
     return "<p>Hello, World!</p>"
 
 @app.route("/products", methods=['GET'])
@@ -18,18 +22,23 @@ def get_products():
     products = list(db.inventory.find({}, {"_id": 0}))  
     return jsonify(products)
 
+
 @app.route("/register", methods=['POST'])
 def register():
     data = request.get_json()
     username = data['username']
-    email = data['email']
     password = data['password']
     
-    if db.users.find_one({"username": username}):
-        return jsonify({"message": "Username already exists"}), 400
+    existing_user = db.users.find_one({"username": username})
+    if existing_user:
+        return jsonify({"message": "User already exists!"}), 400
     
-    db.users.insert_one({"username": username, "email": email, "password": password})
+    hashed_password = hashpw(password.encode('utf-8'), gensalt())
+    new_user = {"username": username, "password": hashed_password}
+    db.users.insert_one(new_user)
+    
     return jsonify({"message": "User registered successfully"}), 201
+
 
 @app.route("/login", methods=['POST'])
 def login():
@@ -37,12 +46,16 @@ def login():
     username = data['username']
     password = data['password']
     
-    user = db.users.find_one({"username": username, "password": password})
-    
+    user = db.users.find_one({"username": username})
     if not user:
-        return jsonify({"message": "Invalid username or password"}), 401
+        return jsonify({"message": "User doesn't exist!"}), 401
     
-    return jsonify({"message": "Login successful"}), 200
+    if not checkpw(password.encode('utf-8'), user['password']):
+        return jsonify({"message": "Username or password is incorrect"}), 401
+    
+    token = encode({'id': str(user['_id'])}, app.config['SECRET_KEY'], algorithm='HS256')
+    return jsonify({"token": token, "userID": str(user['_id'])}), 200
+    # return jsonify({"message": "User logged in successfully"}), 201
 
 if __name__ == "__main__":
     app.run(debug=True)
