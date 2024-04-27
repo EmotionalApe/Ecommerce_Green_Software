@@ -2,6 +2,8 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 from flask_pymongo import pymongo
 
+from bson import ObjectId  
+
 from bcrypt import hashpw, gensalt, checkpw
 from jwt import encode, decode
 
@@ -21,7 +23,14 @@ def hello_world():
 
 @app.route("/products", methods=['GET'])
 def get_products():
-    products = list(db.inventory.find({}, {"_id": 0}))  
+    # Retrieve products from the inventory collection
+    products = list(db.inventory.find({}, {"_id": 1, "itemName": 1, "description": 1, "price": 1, "image": 1}))
+
+    # Convert ObjectId to string for each product
+    for product in products:
+        product['_id'] = str(product['_id'])
+
+    # Return products as JSON response
     return jsonify(products)
 
 
@@ -63,25 +72,25 @@ def login():
 def add_to_cart():
     data = request.get_json()
     token = data['token']
-    item = data['item']
-    
+    productId = data['productId'] 
+
     try:
         decoded_token = decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
         username = decoded_token['username']
     except Exception as e:
         return jsonify({"message": "Invalid token"}), 401
-    
+
     # Check if the user's cart exists, create it if not
     user_cart = db.cart.find_one({"username": username})
     if not user_cart:
         user_cart = {"username": username, "items": []}
-    
-    # Add the item to the user's cart
-    user_cart['items'].append(item)
-    
+
+    # Add the product ID to the user's cart
+    user_cart['items'].append(productId)  # Append the productId to the 'items' list
+
     # Upsert the user's cart
     db.cart.replace_one({"username": username}, user_cart, upsert=True)
-    
+
     return jsonify({"message": "Item added to cart successfully"}), 200
 
 @app.route("/get_cart", methods=['POST'])
@@ -96,12 +105,22 @@ def get_cart():
         return jsonify({"message": "Invalid token"}), 401
     
     # Check if the user's cart exists
-    user_cart = db.cart.find_one({"username": username},{"_id": 0})
+    user_cart = db.cart.find_one({"username": username},{"_id": 0, "items": 1})
+    print("userCart:" , user_cart)
+    # products = list(db.inventory.find({}, {"_id": 1, "itemName": 1, "description": 1, "price": 1, "image": 1}))
     if not user_cart:
         return jsonify({"message": "No items in cart"}), 200
     else:
         # Return the user's cart
         return jsonify(user_cart), 200
+
+@app.route("/get_product", methods=['POST']) 
+def get_product():
+    data = request.get_json()
+    product = data.get('productId')
+    # Check if the user's cart exists
+    prodDetails = db.inventory.find_one({"_id": product})
+    return jsonify(prodDetails), 200
 
 
 if __name__ == "__main__":
